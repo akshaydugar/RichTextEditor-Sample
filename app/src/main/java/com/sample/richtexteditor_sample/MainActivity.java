@@ -11,6 +11,7 @@ import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
 
 public class MainActivity extends AppCompatActivity
 {
+    RichEditText mRichEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -18,12 +19,16 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RichEditText richEditText = (RichEditText) findViewById(R.id.rich_edit_text);
+        mRichEditText = (RichEditText) findViewById(R.id.rich_edit_text);
         RichTextActions richTextActions = (RichTextActions) findViewById(R.id.rich_text_actions);
 
-        richEditText.setRichTextActionsView(richTextActions);
-        richEditText.setPreviewText(getString(R.string.color_picker_text_preview));
-        richEditText.setHint(getString(R.string.hint));
+        mRichEditText.setRichTextActionsView(richTextActions);
+        mRichEditText.setPreviewText(getString(R.string.color_picker_text_preview));
+        mRichEditText.setHint(getString(R.string.hint));
+
+        if (savedInstanceState != null) {
+            mRichEditText.restoreState(savedInstanceState);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (0 != (getApplication().getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)) {
@@ -32,4 +37,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        if (mRichEditText != null) {
+            mRichEditText.saveState(outState);
+        }
+    }
 }
